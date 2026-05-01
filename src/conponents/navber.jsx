@@ -21,6 +21,9 @@ const Navbar = () => {
   // cart ref for cart animation
   const cartRef = useRef();
 
+  // navbar ref for animation
+  const navRef = useRef();
+
   // index of links
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -245,9 +248,23 @@ const Navbar = () => {
       cart.removeEventListener("mouseleave", leave);
     };
   });
+
+  // navbar animation
+  useGSAP(() => {
+    gsap.from(navRef.current, {
+      y: -80,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+  }, []);
+
   return (
     <>
-      <div className="absolute top-4 left-4 right-4 flex-between h-13 px-10">
+      <div
+        className="absolute top-4 left-4 right-4 flex-between h-13 px-10"
+        ref={navRef}
+      >
         {/* Logo */}
         <a
           ref={logoRef}
