@@ -18,6 +18,9 @@ const Navbar = () => {
   // login link ref for animation
   const loginRef = useRef();
 
+  // cart ref for cart animation
+  const cartRef = useRef();
+
   // index of links
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -195,6 +198,53 @@ const Navbar = () => {
       login.removeEventListener("mouseleave", leave);
     };
   });
+
+  // cart link animation
+  useGSAP(() => {
+    const tl = gsap.timeline({ paused: true });
+
+    // initial state of icon
+    gsap.set(".cart-icon", {
+      y: 10,
+      opacity: 0,
+      scale: 0.7,
+    });
+
+    // text up + fade
+    tl.to(".cart-text", {
+      y: -24,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+
+    // icon center + pop
+    tl.to(
+      ".cart-icon",
+      {
+        y: 0,
+
+        opacity: 1,
+        scale: 1.2,
+        duration: 0.4,
+        ease: "back.out(1.7)",
+      },
+      "<",
+    );
+
+    const cart = cartRef.current;
+
+    const enter = () => tl.play();
+    const leave = () => tl.reverse();
+
+    cart.addEventListener("mouseenter", enter);
+    cart.addEventListener("mouseleave", leave);
+
+    return () => {
+      cart.removeEventListener("mouseenter", enter);
+      cart.removeEventListener("mouseleave", leave);
+    };
+  });
   return (
     <>
       <div className="absolute top-4 left-4 right-4 flex-between h-13 px-10">
@@ -257,6 +307,7 @@ const Navbar = () => {
             </span>
           </NavLink>
           <NavLink
+            ref={cartRef}
             to="#"
             className="text-black text-[13px] font-semibold px-4 py-2 rounded-full bg-white  transition-all backdrop-blur-md"
           >
