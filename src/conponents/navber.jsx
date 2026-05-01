@@ -11,8 +11,12 @@ gsap.registerPlugin(SplitText);
 const Navbar = () => {
   // logo ref for logo animation
   const logoRef = useRef();
+
   //  link ref for link animation
   const linkRef = useRef();
+
+  // login link ref for animation
+  const loginRef = useRef();
 
   // index of links
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,7 +90,7 @@ const Navbar = () => {
     };
   });
 
-  // link hover animation
+  //link hover animation
   useGSAP(() => {
     const items = gsap.utils.toArray(".nav-item");
 
@@ -144,9 +148,56 @@ const Navbar = () => {
       ease: "power2.out",
     });
   };
+
+  // login link animation
+  useGSAP(() => {
+    const tl = gsap.timeline({ paused: true });
+
+    // initial state of icon
+    gsap.set(".login-icon", {
+      y: 10,
+      opacity: 0,
+      scale: 0.7,
+    });
+
+    // text up + fade
+    tl.to(".login-text", {
+      y: -24,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+
+    // icon center + pop
+    tl.to(
+      ".login-icon",
+      {
+        y: 0,
+
+        opacity: 1,
+        scale: 1.2,
+        duration: 0.4,
+        ease: "back.out(1.7)",
+      },
+      "<",
+    );
+
+    const login = loginRef.current;
+
+    const enter = () => tl.play();
+    const leave = () => tl.reverse();
+
+    login.addEventListener("mouseenter", enter);
+    login.addEventListener("mouseleave", leave);
+
+    return () => {
+      login.removeEventListener("mouseenter", enter);
+      login.removeEventListener("mouseleave", leave);
+    };
+  });
   return (
     <>
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between h-13 px-10">
+      <div className="absolute top-4 left-4 right-4 flex-between h-13 px-10">
         {/* Logo */}
         <a
           ref={logoRef}
@@ -195,18 +246,25 @@ const Navbar = () => {
 
         {/* Cart + Login */}
         <div className="flex items-center gap-2">
-          <a
-            href="#"
-            className="text-white/60 text-[13px] font-medium px-4 py-2 rounded-full border border-white/12 hover:text-white transition-all"
+          <NavLink
+            ref={loginRef}
+            to="#"
+            className="text-white/100 text-[13px] font-medium px-4 py-2 rounded-full border border-white/30 transition-all bg-white/5 backdrop-blur-md"
           >
-            Login
-          </a>
-          <a
-            href="#"
-            className="text-black text-[13px] font-semibold px-4 py-2 rounded-full bg-white hover:bg-white/90 transition-all"
+            <span className="login-text relative z-10">Login</span>
+            <span className="login-icon absolute inset-0 flex items-center justify-center z-0">
+              👤
+            </span>
+          </NavLink>
+          <NavLink
+            to="#"
+            className="text-black text-[13px] font-semibold px-4 py-2 rounded-full bg-white  transition-all backdrop-blur-md"
           >
-            Cart (0)
-          </a>
+            <span className="cart-text relative z-10">Cart (0)</span>
+            <span className="cart-icon absolute inset-0 flex items-center justify-center z-0">
+              📦
+            </span>
+          </NavLink>
         </div>
       </div>
     </>
