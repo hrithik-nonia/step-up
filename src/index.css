@@ -3,3 +3,17 @@
 body {
   font-family: "Quicksand", sans-serif;
 }
+
+@layer components {
+  .flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, #fff, #aaa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
