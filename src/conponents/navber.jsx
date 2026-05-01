@@ -254,17 +254,14 @@ const Navbar = () => {
     gsap.from(navRef.current, {
       y: -80,
       opacity: 0,
-      duration: 0.8,
+      duration: 1.5,
       ease: "power3.out",
     });
   }, []);
 
   return (
     <>
-      <div
-        className="absolute top-4 left-4 right-4 flex-between h-13 px-10"
-        ref={navRef}
-      >
+      <nav className=" mt-4 flex-between h-13 px-10" ref={navRef}>
         {/* Logo */}
         <a
           ref={logoRef}
@@ -334,7 +331,7 @@ const Navbar = () => {
             </span>
           </NavLink>
         </div>
-      </div>
+      </nav>
     </>
   );
 };
