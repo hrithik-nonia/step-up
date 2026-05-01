@@ -2,13 +2,29 @@ import navLinks from "../constant/index.js";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 // register plugin
 gsap.registerPlugin(SplitText);
 
 const Navbar = () => {
+  // logo ref for logo animation
   const logoRef = useRef();
+  //  link ref for link animation
+  const linkRef = useRef();
+
+  // index of links
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // total no of links
+  const totalLinks = navLinks.length;
+
+  // esitch to next index of link
+  const goToSlide = (index) => {
+    const newIndex = (index + totalLinks) % totalLinks;
+    setCurrentIndex(newIndex);
+  };
 
   useGSAP(() => {
     const logoSplit = new SplitText(".logo-text", { type: "chars,words" });
@@ -70,6 +86,64 @@ const Navbar = () => {
     };
   });
 
+  // link hover animation
+  useGSAP(() => {
+    const items = gsap.utils.toArray(".nav-item");
+
+    items.forEach((item) => {
+      const icon = item.querySelector(".nav-icon");
+
+      gsap.set(icon, {
+        y: 20,
+        opacity: 0,
+        scale: 0.8,
+      });
+    });
+  }, []);
+
+  const handleEnter = (item) => {
+    const text = item.querySelector(".nav-text");
+    const icon = item.querySelector(".nav-icon");
+
+    gsap.killTweensOf([text, icon]);
+
+    gsap.to(text, {
+      y: -20,
+      opacity: 0,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+
+    gsap.to(icon, {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      duration: 0.3,
+      ease: "back.out(1.7)",
+    });
+  };
+
+  const handleLeave = (item) => {
+    const text = item.querySelector(".nav-text");
+    const icon = item.querySelector(".nav-icon");
+
+    gsap.killTweensOf([text, icon]);
+
+    gsap.to(text, {
+      y: 0,
+      opacity: 1,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+
+    gsap.to(icon, {
+      y: 20,
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+  };
   return (
     <>
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between h-13 px-10">
@@ -88,17 +162,35 @@ const Navbar = () => {
         </a>
 
         {/* Nav links — pill container with floating active state */}
-        <div className="flex items-center gap-0.5 bg-white/5 border border-white/10 rounded-full px-1.5 py-1.5 backdrop-blur-md">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={link.link}
-              className="text-white/55 hover:text-white text-[13px] font-medium px-4 py-1.5 rounded-full transition-all duration-150
-          [&.active]:bg-white/12 [&.active]:border [&.active]:border-white/20 [&.active]:text-white"
-            >
-              {link.title}
-            </a>
-          ))}
+        <div className=" flex items-center gap-0.5 bg-white/5 border border-white/10 rounded-full px-1.5 py-1.5 backdrop-blur-md">
+          {navLinks.map((link, index) => {
+            const isActive = index === currentIndex;
+            return (
+              <NavLink
+                ref={linkRef}
+                key={link.id}
+                to={link.link}
+                className={`nav-item relative flex-between overflow-hidden text-white/100  text-[13px] font-medium px-4 py-1.5 rounded-full transition-all duration-150 ${
+                  isActive
+                    ? "bg-white/30 border border-white/10 text-white"
+                    : "text-white/50"
+                }`}
+                onMouseEnter={(e) => handleEnter(e.currentTarget)}
+                onMouseLeave={(e) => handleLeave(e.currentTarget)}
+                onClick={() => goToSlide(index)}
+              >
+                {/* TEXT */}
+                <span className="nav-text relative z-10 whitespace-nowrap">
+                  {link.title}
+                </span>
+
+                {/* ICON */}
+                <span className="nav-icon absolute inset-0 flex items-center justify-center text-[14px]">
+                  {link.icon}
+                </span>
+              </NavLink>
+            );
+          })}
         </div>
 
         {/* Cart + Login */}

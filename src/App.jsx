@@ -1,9 +1,12 @@
 import LandingPage from "./pages/landing-page";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <LandingPage></LandingPage>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
     </>
   );
 }
