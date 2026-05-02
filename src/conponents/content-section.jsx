@@ -24,8 +24,12 @@ const ContentSection = () => {
     const newIndex = (index + totalSize) % totalSize;
     setCurrentIndex(newIndex);
   };
+
+  // animation for left section
   useGSAP(() => {
     const tl = gsap.timeline();
+
+    const split = new SplitText(".discreption-text", { type: "lines" });
 
     const lines = gsap.utils.toArray(".hero-text");
 
@@ -57,7 +61,7 @@ const ContentSection = () => {
       {
         y: 40,
         opacity: 0,
-        duration: 0.5,
+        duration: 0.3,
         ease: "power3.out",
       },
       "+=0.7",
@@ -71,6 +75,32 @@ const ContentSection = () => {
         scaleX: 1,
         duration: 0.5,
         ease: "power2.out",
+      },
+    );
+
+    // discreption text and read btn animation
+    gsap.set(split.lines, {
+      overflow: "hidden",
+    });
+
+    tl.from(split.lines, {
+      yPercent: 100,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "power3.out",
+    });
+
+    // read more btn
+    tl.fromTo(
+      ".read-more-btn",
+      { yPercent: 40, opacity: 0 }, // start (bottom)
+      {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.1,
+        ease: "power3.out",
+        clearProps: "transform",
       },
     );
 
@@ -136,7 +166,7 @@ const ContentSection = () => {
             </span>
           </button>
 
-          <p className="text-white/80 text-sm leading-relaxed max-w-sm">
+          <p className="discreption-text text-white/80 text-sm leading-relaxed max-w-sm">
             Step into next-level comfort and performance. Designed with
             lightweight materials, breathable knit upper, and responsive
             cushioning for all-day movement and style.
@@ -144,7 +174,7 @@ const ContentSection = () => {
 
           <NavLink
             to="#"
-            className="self-start  text-white/80 text-xs font-bold px-5 py-2.5 rounded-full hover:scale-105 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]  backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 to-white/5 "
+            className="read-more-btn self-start  text-white/80 text-xs font-bold px-5 py-2.5 rounded-full hover:scale-105 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]  backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 to-white/5 "
           >
             Read more
           </NavLink>
@@ -164,7 +194,18 @@ const ContentSection = () => {
         </div>
 
         {/* RIGHT — Price + Size + CTA */}
-        <div className="flex-1 flex flex-col  items-end gap-5 px-8 py-10 text-left">
+        <div className="flex-1 flex flex-col  items-end gap-5 px-8 py-3 text-left">
+          {/* next shoe brand */}
+          <NavLink
+            className="w-full max-w-[245px] 
+            bg-white/5 backdrop-blur-2xl border border-white/10 
+            rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-4  text-center"
+          >
+            <p className="text-white font-bold inline-block scale-x-125 ">
+              NIKE
+            </p>
+          </NavLink>
+
           <div
             className="bg-white/5 backdrop-blur-2xl border border-white/10 
             rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-4 "
@@ -181,62 +222,75 @@ const ContentSection = () => {
               {size.map((size, index) => {
                 const isActive = index === currentIndex;
                 return (
-                  <>
-                    <button
-                      key={size}
-                      className={`w-full h-8 rounded-full text-[11px] border transition-all
+                  <button
+                    key={size}
+                    className={`w-full h-8 rounded-full text-[11px] border transition-all
                   ${
                     isActive
                       ? "border-white/60 bg-white/100 text-black/90"
                       : "border-white/20 text-white/50 hover:border-white/40"
                   }`}
-                      onClick={() => goToSlide(index)}
-                    >
-                      {size}
-                    </button>
-                  </>
+                    onClick={() => goToSlide(index)}
+                  >
+                    {size}
+                  </button>
                 );
               })}
             </div>
           </div>
+          <div className="grid grid-cols-2">
+            {/* right: button */}
+            <div>
+              <button
+                className=" mt-16 mr-7 group relative w-14 h-14 rounded-full 
+                bg-gradient-to-br from-white/20 to-white/5 
+                backdrop-blur-xl border border-white/20 
+                shadow-[0_8px_30px_rgba(0,0,0,0.3)] 
+                hover:scale-105 transition-all duration-300"
+              >
+                <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 blur-xl transition-all"></div>
 
-          {/* social media */}
-          {socialIcons.map((icon, link, index) => (
-            <NavLink
-              key={index}
-              to={link}
-              className="rounded-full p-2 
-              bg-white/5 backdrop-blur-md 
-              border border-white/20 
-              text-white/80 
-              shadow-[0_4px_20px_rgba(0,0,0,0.25)] 
-              hover:bg-white/10 hover:text-white 
-              transition-all duration-300"
-            >
-              {icon}
-            </NavLink>
-          ))}
+                <span
+                  className="relative flex items-center justify-center w-full h-full text-white text-2xl 
+                  group-hover:translate-x-1 transition-transform"
+                >
+                  →
+                </span>
+              </button>
+            </div>
 
-          <h2 className="text-white text-3xl font-bold">₹4,999</h2>
-          <p className="text-white/30 text-xs line-through">₹7,499</p>
-
-          <div className="flex flex-col gap-2 items-end">
-            <p className="text-white/40 text-xs">Select Size</p>
+            {/* RIGHT: icons */}
+            <div className="flex flex-col items-end gap-3">
+              {socialIcons.map((icon, index) => (
+                <NavLink
+                  key={index}
+                  to="#"
+                  className="rounded-full p-2 
+                  bg-white/5 backdrop-blur-md 
+                  border border-white/20 
+                  text-white/80 
+                  shadow-[0_4px_20px_rgba(0,0,0,0.25)] 
+                  hover:bg-white/10 hover:text-white 
+                  transition-all duration-300"
+                >
+                  {icon}
+                </NavLink>
+              ))}
+            </div>
           </div>
-
-          <div className="flex flex-col gap-2 items-end">
-            <a
-              href="#"
-              className="bg-white text-black text-xs font-bold px-5 py-2.5 rounded-full"
-            >
-              Add to Cart
-            </a>
-            <a
-              href="#"
-              className="text-white/40 text-xs hover:text-white/60 transition-all"
-            >
-              Save to Wishlist →
-            </a>
+          <div
+            className="rounded-full py-2 px-4 m-6 
+                  bg-white/5 backdrop-blur-md 
+                  border border-white/20 
+                  text-white/80 
+                  shadow-[0_4px_20px_rgba(0,0,0,0.25)] 
+                  hover:bg-white/10 hover:text-white 
+                  transition-all duration-300 "
+          >
+            <button className="self-start  text-white/80 text-xs font-bold px-5 py-2.5 rounded-full hover:scale-105 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]  backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 to-white/5 ">
+              Shop Now
+            </button>
+            <span className="text-white/100 font-bold text-sm ps-3">$ 700</span>
           </div>
         </div>
       </section>
