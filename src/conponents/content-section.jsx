@@ -78,6 +78,18 @@ const ContentSection = () => {
       },
     );
 
+    // left shift button animation
+    tl.fromTo(
+      ".left-shift-btn",
+      { scale: 0, transformOrigin: "center", opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.1,
+        ease: "back.out(2)",
+      },
+    );
+
     // discreption text and read btn animation
     gsap.set(split.lines, {
       overflow: "hidden",
@@ -108,6 +120,106 @@ const ContentSection = () => {
     return () => {
       splits.forEach((s) => s.revert());
     };
+  }, []);
+
+  // animation for right section
+  useGSAP(() => {
+    const tl = gsap.timeline();
+
+    // brand clip board animation
+    tl.fromTo(
+      ".brand-clip-board",
+      { scale: 0.8, opacity: 0, x: 40, y: -40, transformOrigin: "top right" },
+      {
+        scale: 1,
+        x: 0,
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: "power3.out",
+      },
+    );
+
+    // shoe size comp animation
+    tl.fromTo(
+      ".shoe-size-comp",
+      {
+        scale: 0.8,
+        opacity: 0,
+        x: 40,
+        y: -40,
+        transformOrigin: "right",
+      },
+      {
+        scale: 1,
+        x: 0,
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: "power3.out",
+      },
+    );
+
+    // right shift btn
+    tl.fromTo(
+      ".right-shift-btn",
+      { scale: 0, transformOrigin: "center", opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.1,
+        ease: "back.out(2)",
+      },
+    );
+
+    // social media linka animation
+    tl.fromTo(
+      ".social-media",
+      { scale: 0, transformOrigin: "center", opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.1,
+        ease: "back.out(2)",
+      },
+    );
+
+    // 1️⃣ container pop
+    tl.fromTo(
+      ".price-section",
+      { scale: 0.8, opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+      },
+    );
+
+    // 2️⃣ price text show first
+    tl.from(
+      ".price-text",
+      {
+        x: -20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+      },
+      "-=0.2",
+    );
+
+    // 3️⃣ button enters from left (push feel)
+    tl.fromTo(
+      ".shop-now-btn",
+      { x: -150, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+        clearProps: "transform",
+      },
+    );
   }, []);
 
   // social media icons
@@ -149,8 +261,9 @@ const ContentSection = () => {
             </p>
           </div>
 
+          {/* left shift button */}
           <button
-            className="my-10 ms-30 group relative w-14 h-14 rounded-full 
+            className=" left-shift-btn my-10 ms-30 group relative w-14 h-14 rounded-full 
             bg-gradient-to-br from-white/20 to-white/5 
             backdrop-blur-xl border border-white/20 
             shadow-[0_8px_30px_rgba(0,0,0,0.3)] 
@@ -181,7 +294,7 @@ const ContentSection = () => {
         </div>
 
         {/* CENTER — Product */}
-        <div className="flex-[1.2] flex flex-col items-center justify-center gap-4 relative">
+        <div className="flex-[1.2] flex flex-col items-center justify-center gap-3 relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(255,255,255,0.04),transparent_70%)]" />
           <span className="text-[100px] leading-none relative z-10 drop-shadow-2xl">
             👟
@@ -197,7 +310,7 @@ const ContentSection = () => {
         <div className="flex-1 flex flex-col  items-end gap-5 px-8 py-3 text-left">
           {/* next shoe brand */}
           <NavLink
-            className="w-full max-w-[245px] 
+            className="brand-clip-board w-full max-w-[245px] 
             bg-white/5 backdrop-blur-2xl border border-white/10 
             rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-4  text-center"
           >
@@ -207,7 +320,7 @@ const ContentSection = () => {
           </NavLink>
 
           <div
-            className="bg-white/5 backdrop-blur-2xl border border-white/10 
+            className="shoe-size-comp bg-white/5 backdrop-blur-2xl border border-white/10 
             rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-4 "
           >
             <p className="text-white/100 text-[11px] tracking-[2.5px] uppercase mb-2 pe-10">
@@ -224,7 +337,7 @@ const ContentSection = () => {
                 return (
                   <button
                     key={size}
-                    className={`w-full h-8 rounded-full text-[11px] border transition-all
+                    className={` w-full h-8 rounded-full text-[11px] border transition-all
                   ${
                     isActive
                       ? "border-white/60 bg-white/100 text-black/90"
@@ -242,7 +355,7 @@ const ContentSection = () => {
             {/* right: button */}
             <div>
               <button
-                className=" mt-16 mr-7 group relative w-14 h-14 rounded-full 
+                className="right-shift-btn mt-5 mr-7 group relative w-14 h-14 rounded-full 
                 bg-gradient-to-br from-white/20 to-white/5 
                 backdrop-blur-xl border border-white/20 
                 shadow-[0_8px_30px_rgba(0,0,0,0.3)] 
@@ -260,12 +373,12 @@ const ContentSection = () => {
             </div>
 
             {/* RIGHT: icons */}
-            <div className="flex flex-col items-end gap-3">
+            <div className="flex flex-col items-end gap-3 mt-2">
               {socialIcons.map((icon, index) => (
                 <NavLink
                   key={index}
                   to="#"
-                  className="rounded-full p-2 
+                  className="social-media rounded-full p-2 
                   bg-white/5 backdrop-blur-md 
                   border border-white/20 
                   text-white/80 
@@ -279,18 +392,22 @@ const ContentSection = () => {
             </div>
           </div>
           <div
-            className="rounded-full py-2 px-4 m-6 
-                  bg-white/5 backdrop-blur-md 
-                  border border-white/20 
-                  text-white/80 
-                  shadow-[0_4px_20px_rgba(0,0,0,0.25)] 
-                  hover:bg-white/10 hover:text-white 
-                  transition-all duration-300 "
+            className="price-section flex items-center gap-3 rounded-full py-2 px-4 m-6 
+            bg-white/5 backdrop-blur-md border border-white/20 
+            text-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.25)]  overflow-hidden"
           >
-            <button className="self-start  text-white/80 text-xs font-bold px-5 py-2.5 rounded-full hover:scale-105 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]  backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 to-white/5 ">
+            <button
+              className="shop-now-btn text-white text-xs font-bold px-5 py-2 rounded-full 
+              backdrop-blur-xl border border-white/20 
+              bg-gradient-to-br from-white/20 to-white/5 
+              hover:scale-105 transition-all duration-300"
+            >
               Shop Now
             </button>
-            <span className="text-white/100 font-bold text-sm ps-3">$ 700</span>
+
+            <span className="price-text text-white font-bold text-sm whitespace-nowrap">
+              $ 700
+            </span>
           </div>
         </div>
       </section>
