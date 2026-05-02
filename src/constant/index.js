@@ -7,3 +7,4 @@ const navLinks = [
   { id: "contact", title: "Contact", link: "#", icon: "📞" }
 ]
 export default navLinks
+
