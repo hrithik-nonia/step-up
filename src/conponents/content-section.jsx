@@ -6,6 +6,8 @@ gsap.registerPlugin(SplitText);
 
 const ContentSection = () => {
   useGSAP(() => {
+    const tl = gsap.timeline();
+
     const lines = gsap.utils.toArray(".hero-text");
 
     const splits = [];
@@ -21,6 +23,7 @@ const ContentSection = () => {
 
       gsap.from(split.chars, {
         x: -60,
+        y: -40,
         opacity: 0,
         duration: 0.5,
         stagger: 0.03,
@@ -29,7 +32,30 @@ const ContentSection = () => {
       });
     });
 
-    // ✅ proper cleanup
+    // SHOE TEXT
+    tl.from(
+      ".shoe-text",
+      {
+        y: 40,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.out",
+      },
+      "+=0.7",
+    );
+
+    //UNDERLINE
+    tl.fromTo(
+      ".shoe-underline",
+      { scaleX: 0, transformOrigin: "left" },
+      {
+        scaleX: 1,
+        duration: 0.5,
+        ease: "power2.out",
+      },
+    );
+
+    // proper cleanup
     return () => {
       splits.forEach((s) => s.revert());
     };
@@ -56,12 +82,14 @@ const ContentSection = () => {
             >
               Step
             </h1>
-            <p className="text-white/40 text-sm leading-relaxed">
-              Premium sneakers crafted with breathable mesh and ultra-grip
-              soles.
-            </p>
-            <p className="text-white/25 text-[11px] tracking-[2.5px] uppercase mb-2">
-              New Drop
+
+            <p className="shoe-text text-white text-2xl tracking-[2.5px] uppercase mt-8 font-bold relative inline-block">
+              shoe name
+              <span
+                className="shoe-underline absolute left-0 bottom-[-6px] w-full h-[2px] 
+                bg-gradient-to-r from-white to-transparent 
+                rotate-[0.5deg] blur-[0.3px] opacity-80"
+              ></span>
             </p>
           </div>
           <ul className="flex flex-col gap-2">
