@@ -249,8 +249,10 @@ const ContentSection = () => {
     const slides = gsap.utils.toArray(".slider > div");
 
     slides.forEach((slide, i) => {
+      const img = slide.querySelector("img");
+
       if (i === index) {
-        // CENTER ACTIVE
+        // CENTER ACTIVE - 3D floating
         gsap.to(slide, {
           scale: 1,
           opacity: 1,
@@ -258,8 +260,32 @@ const ContentSection = () => {
           duration: 0.6,
           ease: "power3.out",
         });
+
+        // Continuous floating animation on image
+        gsap.killTweensOf(img);
+        gsap.to(img, {
+          y: -12,
+          duration: 2,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+
+        // Shadow element ke liye
+        const shadow = slide.querySelector(".product-shadow");
+        if (shadow) {
+          gsap.killTweensOf(shadow);
+          gsap.to(shadow, {
+            opacity: 0.5,
+            scaleX: 0.8,
+            duration: 2,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+          });
+        }
       } else if (i < index) {
-        // LEFT SIDE
+        gsap.killTweensOf(img);
         gsap.to(slide, {
           scale: 0.8,
           opacity: 0,
@@ -267,8 +293,9 @@ const ContentSection = () => {
           duration: 0.6,
           ease: "power3.out",
         });
+        gsap.to(img, { y: 0, duration: 0.3 });
       } else {
-        // RIGHT SIDE
+        gsap.killTweensOf(img);
         gsap.to(slide, {
           scale: 0.8,
           opacity: 0,
@@ -276,6 +303,7 @@ const ContentSection = () => {
           duration: 0.6,
           ease: "power3.out",
         });
+        gsap.to(img, { y: 0, duration: 0.3 });
       }
     });
   }, [index]);
@@ -294,7 +322,21 @@ const ContentSection = () => {
                     key={i}
                     className="absolute inset-0 flex items-center justify-center "
                   >
-                    <img src={img} className="h-[260px] object-contain " />
+                    <div className="relative flex items-center justify-center">
+                      <img
+                        src={img}
+                        className="h-[400px] object-contain relative z-10"
+                      />
+
+                      <div
+                        className="product-shadow absolute bottom-[-18px] left-1/2 -translate-x-1/2 w-[180px] h-[20px] rounded-full"
+                        style={{
+                          background:
+                            "radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%)",
+                          filter: "blur(8px)",
+                        }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
